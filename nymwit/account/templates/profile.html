@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block breadcrumbs %}
+<li><a href="{% url account.views.profile profile.username %}">{{profile.username}}</a></li>
+{% endblock %}
+
+{% block main %}
+<h1>Current Games</h1>
+{% if current %}
+{% include "_gamelist.html" with games=current %}
+{% else %}
+<p>No current games.</p>
+{% endif %}
+
+<h1>Recent Games</h1>
+{% if past %}
+{% include "_gamelist.html" with games=past %}
+{% else %}
+<p>No recent games.</p>
+{% endif %}
+
+{% if prefs_form %}
+<h2>Preferences</h2>
+{% include "_form.html" with form=prefs_form submitlabel='Save'%}
+{% endif %}
+
+
+{% endblock %}
+
+

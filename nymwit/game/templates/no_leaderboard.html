@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block main %}
+<h1>Top Scores</h1>
+<div class="tagline">{{window_name|default:""}} {{time_period|default:""}}</div>
+
+<nav class="leaderboard">
+  <ul>
+    <li><a href="{% url game.views.leaderboard_all %}">All Time</a></li>
+    <li><a href="{% url game.views.leaderboard_window "year" %}">Yearly</a></li>
+    <li><a href="{% url game.views.leaderboard_window "month" %}">Montly</a></li>
+    <li><a href="{% url game.views.leaderboard_window "week" %}">Weekly</a></li>
+  </ul>
+</nav>
+
+
+<p>Sorry, no leaderboard data available :-(</p>
+
+{% endblock %}
+

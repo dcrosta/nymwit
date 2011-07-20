@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block breadcrumbs %}
+<li><a href="{% url account.views.login %}">Log In</a></li>
+{% endblock %}
+
+{% block main %}
+<h1>Log In</h1>
+
+<p>Don't have an account? <a href="{% url account.views.signup %}">Create one now</a>.</p>
+
+{% include "_form.html" %}
+
+{% endblock %}
+

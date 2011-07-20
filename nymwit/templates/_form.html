@@ -1,0 +1,48 @@
+{% load game %}
+<form {% if formid %}id="{{formid}}" {% endif %}method="post" action="{{form.action}}">
+  <table class="form{% if wide %} wide{% endif %}{% if hidelabels %} hidelabels{% endif %}">
+    <tbody>
+      {% if form.non_field_errors %}
+      <tr>
+        <td{% if not hidelabels %} colspan="2"{% endif %}>
+          <ul class="errorlist">
+            {% for error in form.non_field_errors %}
+            <li>{{error}}</li>
+            {% endfor %}
+          </ul>
+        </td>
+      </tr>
+      {% endif %}
+      {% for field in form %}
+      {% if not field.is_hidden %}
+      <tr>
+        {% if not hidelabels %}
+        <th>{{field.label_tag}}</th>
+        {% endif %}
+        <td id="td-{{field.name}}">
+          {{field}}
+          {{field.errors}}
+          {% if field.help_text %}
+          <div class="help">{{field.help_text}}</div>
+          {% endif %}
+        </td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+      {% if not nosubmit %}
+      <tr>
+        {% if not hidelabels %}
+        <th></th>
+        {% endif %}
+        <td><input type="submit" name="save" value="{{submitlabel|default:"Submit"}}"/></td>
+      </tr>
+      {% endif %}
+    </tbody>
+  </table>
+  {% for field in form %}
+  {% if field.is_hidden %}
+  {{ field }}
+  {% endif %}
+  {% endfor %}
+  {% csrf_token %}
+</form>

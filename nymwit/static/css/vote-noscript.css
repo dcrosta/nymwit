@@ -1,0 +1,3 @@
+form#vote td#td-entry select {
+  display:inline-block !important;
+}

@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load game %}
+
+{% block breadcrumbs %}
+<li><a href="{% url game.views.game game.pk %}">&ldquo;{{game.acronym}}&rdquo;</a></li>
+{% endblock %}
+
+{% block main %}
+<h1 id="acro">{{game.acronym}}</h1>
+
+{% if messages %}
+<ul class="messages">
+  {% for message in messages %}
+  <li{% if message.tags %} class="{{message.tags}}"{% endif %}>{{message}}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+<h5 id="gamestate">{{game|gametime}}</h5>
+{% if game.state == 'invalid' %}
+<h6 class="reasoninvalid">{{game|invalid_reason}}</h6>
+{% endif %}
+
+{% if game.state == "playing" %}
+  {% if game|can_play:user %}
+  {% include "_form.html" with form=play_form nosubmit=1 wide=1 %}
+  {% endif %}
+{% else %}{# voting or finished #}
+  {% if game.state == 'voting' %}
+    {% if game|can_vote:user %}
+    {% include "_form.html" with form=vote_form formid="vote" submitlabel="Vote" hidelabels=1 %}
+    {% addscript "vote.js" %}
+    <noscript><link rel="stylesheet" href="{{STATIC_URL}}css/vote-noscript.css"/></noscript>
+    {% endif %}
+  {% else %}
+    {% if game|your_vote:user %}
+    <h3>Your Vote</h3>
+    <p class="play">{{game|your_vote:user}}</p>
+    {% endif %}
+  {% endif %}
+{% endif %}
+
+{% if game.state == 'finished' %}
+<h3>Results</h3>
+{% if game|has_votes %}
+<ol class="results">
+  {% for play in game.plays|setscore|dictsortreversed:"score" %}
+  <li class="play">{{play.entry}} &mdash; {{play.username}} &mdash; {{play.score}} vote{{play.score|pluralize}}</li>
+  {% endfor %}
+</ol>
+{% else %}
+{% if game|has_plays %}
+<p>No one voted :-(</p>
+{% else %}
+<p>No one played :-(</p>
+{% endif %}
+{% endif %}
+{% endif %}
+
+{% if game|can_join:user %}
+<p>You can <a href="{% url game.views.join game.pk %}">join this game</a>, so why not?</p>
+{% endif %}
+
+<h4 class="players">Game Chat</h4>
+{% if game.players|filterout:user.username|length > 0 %}<h6 class="players" id="with">(with {{game.players|filterout:user.username|join:", "}})</h6>
+{% else %}<h6 class="players">(no other players)</h6>{% endif %}
+<div class="chat"></div>
+{% if game|can_chat:user and game|chat_open %}
+{% include "_form.html" with form=chat_form formid="chatform" wide=1 nosubmit=1 %}
+{% else %}
+{% if game|chat_open %}
+<p>Sorry, you can only chat if you've joined the game.</p>
+{% else %}
+<p>Sorry, chat for this game is now closed.</p>
+{% endif %}
+{% endif %}
+
+{% addscript "game.js" %}
+<script type="text/javascript">
+  var chatlog = {{chatlog_json|safe}};
+  var gamestate = "{{game.state|safe}}";
+</script>
+{% endblock %}
+

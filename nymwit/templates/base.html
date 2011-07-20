@@ -1,0 +1,54 @@
+{% load game %}
+<!doctype html>
+<html>
+  <head>
+    <title>{% block title %}Nymwit{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/fonts.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/generic.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css"/>
+    {% block styles %}{% endblock %}
+  </head>
+  <body>
+    <header>
+      <div class="content">
+        <ul class="nav">
+          <li><a href="{% url game.views.index %}">Home</a></li>
+          {% block breadcrumbs %}{% endblock %}
+        </ul>
+        <ul class="user">
+          {% if user.is_authenticated %}
+          <li><a href="{% url account.views.profile user.username %}">{{user.username}}</a></li>
+          <li><a href="{% url account.views.logout %}">Log Out</a></li>
+          {% else %}
+          <li><a href="{% url account.views.login %}">Log In</a></li>
+          <li><a href="{% url account.views.signup %}">Sign Up</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </header>
+    <div class="outer">
+      <div class="wrapper">
+        <div class="content">
+          <div class="main">
+            {% block main %}{% endblock %}
+          </div>
+        </div>
+      </div>
+      <footer>
+        <div class="wrapper">
+          <div class="content">
+            &copy; 2011 <a href="https://github.com/dcrosta">Dan Crosta</a>
+            &mdash; <a href="https://github.com/dcrosta/nymwit">Fork me on GitHub!</a>
+            &mdash; <a href="{% url about %}">About Nymwit</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+    {% scripts %}
+    {% for noscript in form_noscripts %}
+    <noscript>{{noscript|safe}}</noscript>
+    {% endfor %}
+  </body>
+</html>
+

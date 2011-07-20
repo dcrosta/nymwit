@@ -1,0 +1,4 @@
+Django == 1.3
+https://github.com/hmarr/mongoengine/tarball/dev#egg=mongoengine
+django-mongoforms == 0.1
+pytz

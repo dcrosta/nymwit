@@ -1,0 +1,13 @@
+{% load game %}
+{% if games %}
+<ul>
+  {% for game in games %}
+  <li>
+  <a href="{% url game.views.game game.pk %}">"{{game.acronym|upper}}"</a>:
+    {{game|gametime}}
+    {% if game|can_join:user %}<a href="{% url game.views.join game.pk %}">join in!</a>{% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+

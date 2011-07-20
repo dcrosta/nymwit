@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block main %}
+<h1>Top Scores</h1>
+<div class="tagline">{{window_name|default:""}} {{time_period|default:""}}</div>
+
+<nav class="leaderboard">
+  <ul>
+    <li><a href="{% url game.views.leaderboard_all %}">All Time</a></li>
+    <li><a href="{% url game.views.leaderboard_window "year" %}">Yearly</a></li>
+    <li><a href="{% url game.views.leaderboard_window "month" %}">Montly</a></li>
+    <li><a href="{% url game.views.leaderboard_window "week" %}">Weekly</a></li>
+  </ul>
+  {% if prev or next %}
+  <ul class="prevnext">
+    {% if prev %}
+    <li><a href="{% url game.views.leaderboard url_window prev %}">&laquo; {{prev_time_period|default:""}}</a></li>
+    {% endif %}
+    <li>{{time_period|default:""}}</li>
+    {% if next %}
+    <li><a href="{% url game.views.leaderboard url_window next %}">{{next_time_period|default:""}} &raquo;</a></li>
+    {% endif %}
+  </ul>
+  {% endif %}
+</nav>
+
+{% if rank %}
+<p>Your rank: {{rank|intcomma}}</p>
+{% endif %}
+
+<ol>
+{% for username, score in leaders %}
+  <li><a href="{% url account.views.profile username %}">{{username}}</a> &mdash; {{score}}</li>
+{% endfor %}
+</ol>
+
+{% endblock %}
+

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load game %}
+
+{% block main %}
+<h1>No Games to Join</h1>
+
+<p>There aren't any games you can join right now, but you can <a href="{% url game.views.new_game %}">create one</a>.</p>
+
+{% endblock %}
+
+

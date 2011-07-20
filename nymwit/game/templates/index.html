@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block main %}
+<img src="{{STATIC_URL}}images/nymwit.png" width="225" height="185" class="logo"/>
+
+<h1>Nymwit</h1>
+<div class="tagline">The original imitation of the original clone of the original 90&rsquo;s board game</div>
+
+<p>
+Nymwit is a word game in which players compete to come up with the most
+creative, popular, quirky, or notable acronym given a set of letters &mdash; in
+other words, <a href="http://en.wikipedia.org/wiki/Backronym">backronyms</a>.
+</p>
+
+{% if not user.is_authenticated %}
+<p>
+It's fun, easy, and won't take up much of your time -- so
+<a href="{% url account.views.signup %}">sign up</a> now!
+</p>
+{% else %}
+<p>Welcome back, {{user.username}}!</p>
+{% endif %}
+
+<h2>Your Games</h2>
+{% if your_games %}
+{% include "_gamelist.html" with games=your_games %}
+{% else %}
+<p>You're not playing any games at the moment.</p>
+{% endif %}
+
+{% if user.is_authenticated %}
+<h2>Other Games</h2>
+{% else %}
+<h2>Games in Progress</h2>
+{% endif %}
+
+{% if other_games %}
+<p>There {{other_games|pluralize:"is,are"}} {{other_games|intcomma}} game{{other_games|pluralize}} in progress -- why not <a href="{% url game.views.join_random %}">join</a> or
+<a href="{% url game.views.new_game %}">create</a> one now?</p>
+{% else %}
+{% if user.is_authenticated %}
+<p>There are no games in progress, but you can <a href="{% url game.views.new_game %}">create one</a> now.</p>
+{% else %}
+<p>There are no games in progress, but anyone can start one. You must
+<a href="{% url account.views.signup %}">sign up</a> or 
+<a href="{% url account.views.login %}">log in</a> to do so.</p>
+{% endif %}{% endif %}
+
+{% endblock %}
+
