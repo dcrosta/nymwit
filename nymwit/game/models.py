@@ -82,7 +82,8 @@ class Game(Document):
         'indexes': [
             {'fields': ['players', 'state']},
             {'fields': ['state', 'next_ending']},
-        ]
+        ],
+        'allow_inheritance': False,
     }
 
     def __unicode__(self):
