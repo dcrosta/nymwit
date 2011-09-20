@@ -65,7 +65,6 @@ def new_game(request):
     if request.method == 'POST':
         form = GameForm(request.POST)
         if form.is_valid():
-            print form.cleaned_data
             g = Game()
             g.acronym = form.get_acronym()
             g.max_players = int(form.cleaned_data['max_players'])
